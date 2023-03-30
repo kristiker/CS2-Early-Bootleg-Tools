@@ -1,7 +1,7 @@
 "GameInfo"
 {
-	game 		"Half-Life: Alyx"
-	title 		"Half-Life: Alyx"
+	game 		"Counter-Strike 2 Tools"
+	title 		"Counter-Strike 2 Tools"
 	type		singleplayer_only
 	nomodels 1
 	nohimodel 1
@@ -34,7 +34,7 @@
 			AddonRoot			hlvr_addons
 		}
 	}
-	
+
 	MaterialSystem2
 	{
 		RenderModes
@@ -58,32 +58,36 @@
 
 		ShaderIDColors
 		{
-			"generic.vfx" "255 0 255"
+			"generic.vfx" "255 255 255"
 
-			"vr_simple.vfx" "0 255 0"
-			"vr_bloody_simple.vfx" "64 255 0"
-			"vr_simple_2way_blend.vfx" "186 255 0"
-			"vr_simple_2layer_parallax.vfx" "255 186 0"
-			"vr_simple_3layer_parallax.vfx" "255 64 0"
-			"vr_simple_blend_to_triplanar.vfx" "255 186 128"
-			"vr_simple_blend_to_xen_membrane.vfx" "255 128 186"
-			"vr_basic.vfx" "255 255 255"
-			
-			"vr_complex.vfx" "128 0 186"
-			"vr_glass.vfx" "0 255 255"
-			"vr_shatterglass.vfx" "0 0 255"
+			"csgo_simple.vfx" "128 128 128"
+			"csgo_complex.vfx" "64 32 128"
+
+			"csgo_static_overlay.vfx" "0 255 255"
+			"csgo_projected_decals.vfx" "0 128 128"
+			"csgo_glass.vfx" "128 32 128"
+
+			"cables.vfx" "128 64 64"
+			"spritecard.vfx" "240 240 0"
 		}
 	}
 
 	MaterialEditor
 	{
-		"DefaultShader" "vr_simple"
+		"DefaultShader" "csgo_simple"
 	}
 
 	Source1Import
 	{
 		"importmod"			"ep2"
 		"importdir"			"..\hlvr"
+		"createStaticOverlays"	"1"	    // if "1" create static overlays from s1 info_overlays, if "0" will treat them as s2 projected decals.
+		"createPathParticleRopes" "1"   // convert s1 move_rope/keyframe_rope chained entities to path_particle_rope system in s2.
+		"fixup3DSkybox" 		  "1"   // if a func_instance contains a 3d skybox vmf (contains a sky_camera entity), does the s2 fixup accordingly,
+										// otherwise the skybox will end up part of the main map and will need to be fixed up by hand
+										// (as is the common case in s1 where maps have the skybox already part of the main map).
+		"removeHiddenNodes"		  "1"   // 0 => hidden nodes in vmf are imported but marked as visible=false, startenabled=false, 1 => ignore hidden nodes on import
+		"loadBSPDetailData"       "1"	// 1 => Load map file .bsp for detail object system (foliage) data.
 	}
 
 	Engine2
@@ -146,16 +150,16 @@
 		"Engine"	"Source 2"
 		"ToolsDir"	"../sdktools"	// NOTE: Default Tools path. This is relative to the mod path.
 	}
-	
+
 	Hammer
 	{
 		"fgd"							"hlvr.fgd"	// NOTE: This is relative to the 'game' path.
 		"GameFeatureSet"				"HalfLife"
 		"DefaultTextureScale"			"0.250000"
-		"DefaultSolidEntity"			"trigger_multiple"
-		"DefaultPointEntity"			"info_player_start"
+		"DefaultSolidEntity"			"func_buyzone"
+		"DefaultPointEntity"			"info_player_terrorist"
 		"DefaultPathEntity"				"path_particle_rope"
-		"NavMarkupEntity"				"func_hlvr_nav_markup"
+		"NavMarkupEntity"				"func_nav_markup"
 		"OverlayBoxSize"				"8"
 		"UsesBakedLighting"				"1"
 		"TileMeshesEnabled"				"1"
@@ -175,19 +179,19 @@
 		"AddonMapCommand"				"addon_tools_map"
 		"AddonMapCommandIsAddonImplied"	"1"
 	}
-	
+
 	ModelDoc
 	{
 		"models_gamedata"			"models_gamedata.fgd"
 		"export_modeldoc"			"1"
 		"features"					"animgraph;modelconfig"
 	}
-	
+
 	PostProcessingEditor
 	{
 		"supports_vignette"			"0"
 	}
-	
+
 	RenderPipelineAliases
 	{
 		"Tools"			"VR"
@@ -198,7 +202,7 @@
 	{
 		"DefaultSoundEventType" "hlvr_default_3d"
 	}
-	
+
 	BugReporter
 	{
 		"AutoBugProduct" "Half-Life VR"
@@ -217,7 +221,7 @@
 			"sareverb"      "1" // Bake Steam Audio reverb
 			"sapaths"		"1" // Bake Steam Audio pathing info
 		}
-		
+
 		TextureCompiler
 		{
 			MinRoughness			"0.01"	// Minimum roughness value for PBR
@@ -226,12 +230,12 @@
 			CompressMinRatio        "95"
 		}
 
-        MeshCompiler
-        {
-            PerDrawCullingData      "1"
-            EncodeVertexBuffer      "1"
-            EncodeIndexBuffer       "1"
-        }
+		MeshCompiler
+		{
+			PerDrawCullingData      "1"
+			EncodeVertexBuffer      "1"
+			EncodeIndexBuffer       "1"
+		}
 
 		WorldRendererBuilder
 		{
@@ -251,19 +255,37 @@
 
 		BakedLighting
 		{
-			Version 1
-			IndexResolutionDivisor 4
-			IndexCountMax 256
+			Version 2
+			DisableCullingForShadows 1
+			MinSpecLightmapSize 4096
+			LPVAtlas 1
+			LPVOctree 0
 			LightmapChannels
 			{
-				direct_light_indices 1
-				direct_light_strengths 1
 				irradiance 1
-				debug_chart_color 1
-				directional_irradiance 1
-				// data is in directional_irradiance
-				//ao 1
+				direct_light_shadows 1
+
+				directional_irradiance
+				{
+					MaxResolution 4096
+					CompressedFormat DXT1
+				}
+
+				debug_chart_color
+				{
+					MaxResolution 4096
+					CompressedFormat DXT1
+				}
 			}
+		}
+
+		VisBuilder
+		{
+			MaxVisClusters "4096"
+			PreMergeOpenSpaceDistanceThreshold "128.0"
+			PreMergeOpenSpaceMaxDimension "2048.0"
+			PreMergeOpenSpaceMaxRatio "8.0"
+			PreMergeSmallRegionsSizeThreshold "20.0"
 		}
 
 		SteamAudio
@@ -378,7 +400,7 @@
 		"VulkanAdditionalShaderCache" "vulkan_shader_cache.foz"
 		"VulkanStagingPMBSizeLimitMB" "128"
 	}
-	
+
 	Particles
 	{
 		FeatureID						324234
