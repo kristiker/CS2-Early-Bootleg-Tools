@@ -239,13 +239,16 @@
 
 		WorldRendererBuilder
 		{
-			FixTJunctionEdgeCracks	"1"
-			VisibilityGuidedMeshClustering      "1"
-			MinimumTrianglesPerClusteredMesh    "2048"
-			MinimumVerticesPerClusteredMesh     "2048"
-			MinimumVolumePerClusteredMesh       "768"       // ~9x9x9 cube
-			MaxPrecomputedVisClusterMembership  "48"
-			MaxCullingBoundsGroups              "64"
+			FixTJunctionEdgeCracks  		"1"
+			VisibilityGuidedMeshClustering		"1"
+			MinimumTrianglesPerClusteredMesh	"2048"
+			MinimumVerticesPerClusteredMesh		"2048"
+			MinimumVolumePerClusteredMesh		"1800"		// ~12x12x12 cube
+			MaxPrecomputedVisClusterMembership	"48"
+			UseAggregateInstances			"1"
+			AggregateInstancingMeshlets			"1"
+			UseModelDoc							"1"
+			UseStaticEnvMapForObjectsWithLightingOrigin	"1"
 		}
 
 		PhysicsBuilder
