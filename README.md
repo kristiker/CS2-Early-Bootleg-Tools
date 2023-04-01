@@ -10,12 +10,15 @@ Contains the necessary edits to trick CS2 into thinking the lightmaps are of the
 #### Workflow
 
 1. Use ShaderRenamer to generate required shaders. Replace gameinfo.gi.
-2. Compile your map in your HLVR addon. You can test it in HLVR.
-3. To test the map in CS2, drag the HLVR compiled vpk file over to MapPacker. Copy the new VPK to CS2.
-5. If you don't replace the gameinfo.gi file CS2 will warn about outdated lightmaps and render fullbright.
+2. Create new Csgo Complex materials, or port materials from Source with [source1import](https://github.com/kristiker/source1import).
+3. Compile your map in your HLVR addon. You can test it in HLVR.
+4. To test the map in CS2, drag the HLVR compiled vpk file over to MapPacker. Copy the new VPK to CS2.
+5. If you don't replace the gameinfo.gi file, CS2 will warn about outdated lightmaps and render fullbright.
 
 ### Problems
 
 1. In some areas there is flickering void - To fix disable vis for your map.
     - todo. vmap can be [compiled](/content/dota_addons/cs2/maps/COMPILEVIS3.cmd) in dota to get VIS3 worldnode and vvis_c.
-3. Checkerboard on materials with Csgo Simple - To fix enable Ambient Occlusion texture even if there is no AO.
+3. Checkerboard on some materials
+    - Csgo Simple - To fix enable Ambient Occlusion texture even if there is no AO.
+    - Csgo Static Overlay - 
