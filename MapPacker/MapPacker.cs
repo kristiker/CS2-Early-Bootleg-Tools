@@ -111,6 +111,11 @@ void CopyExternalReferences(Resource resource, int depth = 0)
 
         // Copy the file to the map folder
         var newFullFilePath = Path.Combine(mapFolder, refFileName);
+        if (File.Exists(newFullFilePath))
+        {
+            continue;
+        }
+
         Directory.CreateDirectory(Path.GetDirectoryName(newFullFilePath)!);
         File.Copy(fullRefFilePath, newFullFilePath);
         new_files_added++;
@@ -135,7 +140,8 @@ if (vpkProcess.ExitCode != 0)
 }
 
 // Rename file
-File.Move(mapFolder + ".vpk", Path.Combine(Environment.CurrentDirectory, mapname + ".vpk"));
+var finalMap = Path.Combine(Environment.CurrentDirectory, mapname + ".vpk");
+File.Move(mapFolder + ".vpk", finalMap, true);
 
 Console.WriteLine($"Done! Packed {new_files_added} new files into the map file.");
 Console.ReadKey();
