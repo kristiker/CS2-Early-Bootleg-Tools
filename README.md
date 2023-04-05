@@ -20,5 +20,5 @@ Contains the necessary edits to trick CS2 into thinking the lightmaps are of the
 1. In some areas there is flickering void - To fix disable vis for your map.
     - todo. vmap can be [compiled](/content/dota_addons/cs2/maps/COMPILEVIS3.cmd) in dota to get VIS3 worldnode and vvis_c.
 3. Checkerboard on some materials
-    - Csgo Simple - To fix enable Ambient Occlusion texture even if there is no AO.
-    - Csgo Static Overlay - 
+    - Csgo Simple - To fix enable Ambient Occlusion texture even if there is no AO. Or ignore this shader and use Complex.
+    - Csgo Static Overlay - No known fix for the purple checkerboards.
