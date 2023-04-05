@@ -31,7 +31,7 @@ while (mod != null && mod.Name != "game")
 
 if (mod is null || game is null)
 {
-    Console.WriteLine("Map file is not inside the 'game/<mod_or_addon>/maps' folder. Please drag it from there.");
+    Console.WriteLine("Map file is not inside the 'game/<mod_or_addon>/maps' folder. Please drag it from within that folder.");
     Console.ReadKey();
     return;
 }
