@@ -1,10 +1,11 @@
-﻿using ValveResourceFormat;
+using ValveResourceFormat;
 using SteamDatabase.ValvePak;
 using System.Diagnostics;
 
 if (args.Length == 0)
 {
     Console.WriteLine("Please specify a '.vpk' map file.");
+    Console.ReadKey();
     return;
 }
 
@@ -30,7 +31,8 @@ while (mod != null && mod.Name != "game")
 
 if (mod is null || game is null)
 {
-    Console.WriteLine("Map file is not inside a 'game' folder.");
+    Console.WriteLine("Map file is not inside the 'game/<mod_or_addon>/maps' folder. Please drag it from there.");
+    Console.ReadKey();
     return;
 }
 
@@ -38,6 +40,7 @@ var vpkExe = Path.Combine(game.FullName, "bin", "win64", "vpk.exe");
 if (!File.Exists(vpkExe))
 {
     Console.WriteLine("Could not find 'vpk.exe' in the 'game/bin/win64/' folder.");
+    Console.ReadKey();
     return;
 }
 
@@ -136,6 +139,7 @@ vpkProcess.WaitForExit();
 if (vpkProcess.ExitCode != 0)
 {
     Console.WriteLine("Failed to pack the map with 'vpk.exe'.");
+    Console.ReadKey();
     return;
 }
 
