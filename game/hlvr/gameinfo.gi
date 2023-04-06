@@ -74,7 +74,7 @@
 
 	MaterialEditor
 	{
-		"DefaultShader" "csgo_simple"
+		"DefaultShader" "csgo_complex"
 	}
 
 	Source1Import
