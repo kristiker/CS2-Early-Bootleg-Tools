@@ -22,3 +22,8 @@ Contains the necessary edits to trick CS2 into thinking the lightmaps are of the
 3. Checkerboard on some materials
     - Csgo Simple - To fix enable Ambient Occlusion texture even if there is no AO. Or ignore this shader and use Complex.
     - Csgo Static Overlay - No known fix for the purple checkerboards.
+    
+### Results
+<a href="https://www.youtube.com/watch?v=Uf4zJCpWtI4">![image](https://user-images.githubusercontent.com/26466974/230385962-1596cfee-2c51-4fb7-84f6-1e14241f2284.png)</a>
+![image](https://user-images.githubusercontent.com/26466974/230385452-741ea82d-8a8b-4534-a99c-4309f4e2d138.png)
+![image](https://user-images.githubusercontent.com/26466974/230384387-b5186d98-d5a7-428d-be71-575ed0001b71.png)
