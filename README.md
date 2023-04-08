@@ -1,5 +1,5 @@
 ### ShaderRenamer
-ShaderRenamer allows you to author Counter-Strike compatible materials in HL: Alyx. Simply run it once from within the Half-Life Alyx folder to generate the necessary shaders. The materials compiled using these new "aliases" can be used in Counter-Strike 2 maps with few caveats.
+ShaderRenamer allows you to author Counter-Strike compatible materials in HL: Alyx. Simply run it once from within the Half-Life Alyx folder to generate the necessary shaders. The materials compiled using the new Csgo Complex "alias" are forward compatible with Counter-Strike 2.
 
 ### MapPacker
 MapPacker will bundle required materials and textures with the map so it can be moved to Counter-Strike 2 as one package. Place this tool somewhere outside the game folder so it doesn't interfere with the original map files.
@@ -21,7 +21,7 @@ Contains the necessary edits to trick CS2 into thinking the lightmaps are of the
     - todo. vmap can be [compiled](/content/dota_addons/cs2/maps/COMPILEVIS3.cmd) in dota to get VIS3 worldnode and vvis_c.
 3. Checkerboard on some materials
     - Csgo Simple - Enable AO+Metalness to fix dark checkerboards. Or ignore this shader and use Complex.
-    - Csgo Static Overlay - No known fix for the purple checkerboards.
+    - Csgo Static Overlay - No known fix for the purple checkerboards. Complex can be used for overlays by toggling translucent and overlay.
     
 ### Results
 <a href="https://www.youtube.com/watch?v=Uf4zJCpWtI4">![image](https://user-images.githubusercontent.com/26466974/230385962-1596cfee-2c51-4fb7-84f6-1e14241f2284.png)</a>
