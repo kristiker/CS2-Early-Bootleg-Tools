@@ -19,11 +19,10 @@ Contains the necessary edits to trick CS2 into thinking the lightmaps are of the
 
 1. In some areas there is flickering void - To fix disable vis for your map.
     - todo. vmap can be [compiled](/content/dota_addons/cs2/maps/COMPILEVIS3.cmd) in dota to get VIS3 worldnode and vvis_c.
-3. Checkerboard on some materials
-    - Csgo Simple - Enable AO+Metalness to fix dark checkerboards. Or ignore this shader and use Complex.
-    - Csgo Static Overlay - No known fix for the purple checkerboards. Complex can be used for overlays by toggling translucent and overlay.
+2. Lighting workarounds
+    - [Making Maps for Counter-Strike 2 with Half-Life: Alyx Workshop Tools :: The Dual-light Approach](https://4kliksalex.blogspot.com/2023/04/mapping-counter-strike-2-with-half-life.html#:~:text=The%20Dual%2Dlight%20Approach)
     
 ### Results
-<a href="https://www.youtube.com/watch?v=Uf4zJCpWtI4">![image](https://user-images.githubusercontent.com/26466974/230385962-1596cfee-2c51-4fb7-84f6-1e14241f2284.png)</a>
-![image](https://user-images.githubusercontent.com/26466974/232033473-73c1422e-b51c-474d-9e17-77b91a23f11d.png)
 ![image](https://user-images.githubusercontent.com/26466974/232033892-2cf16cb7-3000-47c7-ac7d-bf77b78b8c9c.png)
+![image](https://user-images.githubusercontent.com/26466974/232033473-73c1422e-b51c-474d-9e17-77b91a23f11d.png)
+<a href="https://www.youtube.com/watch?v=Uf4zJCpWtI4">![image](https://user-images.githubusercontent.com/26466974/230385962-1596cfee-2c51-4fb7-84f6-1e14241f2284.png)</a>
