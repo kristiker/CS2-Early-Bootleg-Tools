@@ -25,5 +25,5 @@ Contains the necessary edits to trick CS2 into thinking the lightmaps are of the
     
 ### Results
 <a href="https://www.youtube.com/watch?v=Uf4zJCpWtI4">![image](https://user-images.githubusercontent.com/26466974/230385962-1596cfee-2c51-4fb7-84f6-1e14241f2284.png)</a>
-![image](https://user-images.githubusercontent.com/26466974/230385452-741ea82d-8a8b-4534-a99c-4309f4e2d138.png)
-![image](https://user-images.githubusercontent.com/26466974/230384387-b5186d98-d5a7-428d-be71-575ed0001b71.png)
+![image](https://user-images.githubusercontent.com/26466974/232033473-73c1422e-b51c-474d-9e17-77b91a23f11d.png)
+![image](https://user-images.githubusercontent.com/26466974/232033892-2cf16cb7-3000-47c7-ac7d-bf77b78b8c9c.png)
