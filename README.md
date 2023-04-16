@@ -2,10 +2,13 @@
 ShaderRenamer allows you to author Counter-Strike compatible materials in HL: Alyx. Simply run it once from within the Half-Life Alyx folder to generate the necessary shaders. The materials compiled using the new Csgo Complex "alias" are forward compatible with Counter-Strike 2.
 
 ### MapPacker
-MapPacker will bundle required materials and textures with the map so it can be moved to Counter-Strike 2 as one package. Place this tool somewhere outside the game folder so it doesn't interfere with the original map files.
+MapPacker will bundle required materials and textures with the map so it can be moved to Counter-Strike 2 as one package. Place this tool somewhere outside the game folder so it doesn't interfere with the original map files. Always drag the map vpk from the original location.
 
 ### gameinfo.gi
 Contains the necessary edits to trick CS2 into thinking the lightmaps are of the latest version. Backup your game/hlvr/gameinfo.gi and replace it with this one. 
+
+### ShaderFilePatcher
+ShaderFilePatcher makes all CS2 shaders load in Dota 2 Tools. It does so by changing the files to version 66 and changing BC7 compression hints to DXT5. This gets rid of bc7e.dll error. Materials compile but do not render in Dota. Compiled materials should work fine in CS2.
 
 #### Workflow
 
