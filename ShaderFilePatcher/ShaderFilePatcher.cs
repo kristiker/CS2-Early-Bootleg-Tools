@@ -6,12 +6,6 @@ using ValveResourceFormat.CompiledShader;
 
 namespace ShaderFilePatcher;
 
-public enum Game
-{
-    Dota,
-    Steampal,
-}
-
 public class ShaderPatcher
 {
     const string Output = "patched_shaders/";
@@ -72,10 +66,11 @@ public class ShaderPatcher
                 if (!hasBC7)
                 {
                     Console.WriteLine($"Shader '{shaderFile.ShaderName}' does not reference BC7!");
-                    continue;
                 }
-
-                Console.WriteLine($"Patched shader (replaced BC7 refs with DXT5): {entry.GetFullPath()}");
+                else
+                {
+                    Console.WriteLine($"Patched shader (replaced BC7 refs with DXT5): {entry.GetFullPath()}");
+                }
 
                 var outPath = Path.Combine(Output, "v66_NoBC7", entry.GetFullPath());
                 ShaderFileSave(patchedShader, outPath);
