@@ -14,24 +14,34 @@ public enum Game
 
 public class ShaderPatcher
 {
-    const string ShadersPak = "game/csgo/shaders_pc_dir.vpk";
     const string Output = "patched_shaders/";
-
-    const string DevShadersFolderV67 = @"D:\Users\kristi\Downloads\v67shaders\";
-    const string DevShadersOutput = @"D:\Users\kristi\Downloads\v67shaders\output\";
 
     public static void Main(string[] args)
     {
         Console.WriteLine("CS2 Shader Patcher for Dota 2 Workshop Tools");
 
-        if (!File.Exists(ShadersPak))
+        if (args.Length == 0)
         {
-            Console.WriteLine($"Failed to find shader package: {ShadersPak}");
+            Console.WriteLine("Please drag over the 'shaders_pc_dir.vpk' file.");
+            Console.ReadKey();
+            return;
+        }
+
+        var shadersPak = args[0];
+
+        if (!File.Exists(shadersPak))
+        {
+            Console.WriteLine($"Failed to find shader package: {shadersPak}");
             Console.ReadKey();
         }
 
         using var package = new Package();
-        package.Read(ShadersPak);
+        package.Read(shadersPak);
+
+        if (!package.IsDirVPK)
+        {
+            Console.WriteLine($"Note: Shader package {Path.GetFileName(shadersPak)} is not the dir VPK!");
+        }
 
         foreach (var entry in package.Entries["vcs"])
         {
@@ -40,22 +50,26 @@ public class ShaderPatcher
             using var shaderFile = new ShaderFile();
             shaderFile.Read(entry.GetFullPath(), new MemoryStream(data));
 
-            using var patchedShader = ShaderFile_V67_To_V66(shaderFile);
-            var outPath = Path.Combine(Output, entry.GetFullPath());
+            var patchedShader = shaderFile;
 
-            Console.WriteLine($"Patched shader: {entry.GetFullPath()}");
-            ShaderFileSave(patchedShader, outPath);
+            if (shaderFile.VcsVersion > 66)
+            {
+                patchedShader = ShaderFile_V67_To_V66(patchedShader);
+                Console.WriteLine($"Patched shader {shaderFile.VcsVersion}->{patchedShader.VcsVersion}: {entry.GetFullPath()}");
+
+                var outPath = Path.Combine(Output, entry.GetFullPath());
+                ShaderFileSave(patchedShader, outPath);
+            }
+
+            if (shaderFile == patchedShader)
+            {
+                Console.WriteLine($"Shader {entry.FileName} is already version 66!");
+            }
+
+
         }
 
-        foreach (var entry in package.Entries["ini"])
-        {
-            var outPath = Path.Combine(Output, entry.GetFullPath());
-            File.WriteAllText(outPath, string.Empty);
-
-            Console.WriteLine($"Shader {entry.GetFileName()} is ready!");
-        }
-
-        Console.WriteLine("Done generating shaders!");
+        Console.WriteLine("Done patching shaders!");
         Console.ReadKey();
     }
 
@@ -147,6 +161,18 @@ public class ShaderPatcher
         shaderFile.DataReader.BaseStream.Position = 0;
         shaderFile.DataReader.BaseStream.CopyTo(stream);
         stream.Seek(0, SeekOrigin.Begin);
+
+        var outDir = Path.GetDirectoryName(filePath);
+        if (!Directory.Exists(outDir))
+        {
+            Directory.CreateDirectory(outDir!);
+        }
+
+        var ini = Path.Combine(outDir!, shaderFile.ShaderName + ".ini");
+        if (!File.Exists(ini))
+        {
+            File.WriteAllText(ini, string.Empty);
+        }
 
         File.WriteAllBytes(filePath, stream.ToArray());
     }
