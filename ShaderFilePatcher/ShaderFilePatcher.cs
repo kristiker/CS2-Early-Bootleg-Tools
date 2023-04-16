@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using SteamDatabase.ValvePak;
 using ValveResourceFormat.CompiledShader;
 
@@ -172,6 +173,16 @@ public class ShaderPatcher
 
         var ms = CopyToNewMemoryStream(shaderFile.DataReader.BaseStream);
 
+        if (shaderFile.VcsProgramType == VcsProgramType.Features)
+        {
+            var offset = FindSequenceIndex(ms.ToArray(), Encoding.ASCII.GetBytes("CsgoForward"));
+            if (offset != -1)
+            {
+                PatchBytes(ms, offset, 0, Encoding.ASCII.GetBytes("CsgoForward"), Encoding.ASCII.GetBytes("DotaForward"));
+                Console.WriteLine("Patched CsgoForward to DotaForward!");
+            }
+        }
+
         hasBC7 = false;
         foreach (var paramBlock in shaderFile.ParamBlocks)
         {
@@ -206,7 +217,7 @@ public class ShaderPatcher
             hasBC7 = true;
         }
 
-        if (!hasBC7)
+        if (!hasBC7 && shaderFile.VcsProgramType != VcsProgramType.Features)
         {
             return shaderFile;
         }
@@ -217,6 +228,27 @@ public class ShaderPatcher
         result.Read(shaderFile.FilenamePath, ms);
 
         return result;
+    }
+
+    private static int FindSequenceIndex(byte[] data, byte[] sequence)
+    {
+        for (int i = 0; i < data.Length - sequence.Length + 1; i++)
+        {
+            bool match = true;
+            for (int j = 0; j < sequence.Length; j++)
+            {
+                if (data[i + j] != sequence[j])
+                {
+                    match = false;
+                    break;
+                }
+            }
+            if (match)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private static MemoryStream CopyToNewMemoryStream(Stream original)
