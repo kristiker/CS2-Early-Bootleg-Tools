@@ -15,6 +15,7 @@ public enum Game
 public class ShaderPatcher
 {
     const string ShadersPak = "game/csgo/shaders_pc_dir.vpk";
+    const string Output = "patched_shaders/";
 
     const string DevShadersFolderV67 = @"D:\Users\kristi\Downloads\v67shaders\";
     const string DevShadersOutput = @"D:\Users\kristi\Downloads\v67shaders\output\";
@@ -26,28 +27,7 @@ public class ShaderPatcher
         if (!File.Exists(ShadersPak))
         {
             Console.WriteLine($"Failed to find shader package: {ShadersPak}");
-            //Console.ReadKey();
-
-            var shaderFile = new ShaderFile();
-            shaderFile.Read(Path.Combine(DevShadersFolderV67, "csgo_simple_pc_50_features.vcs"));
-
-            var newShaderFile = ShaderDowngrade_V67_To_V66(shaderFile);
-
-            if (!Directory.Exists(DevShadersOutput))
-            {
-                Directory.CreateDirectory(DevShadersOutput);
-            }
-
-            var stream = new MemoryStream();
-            newShaderFile.DataReader.BaseStream.Position = 0;
-            newShaderFile.DataReader.BaseStream.CopyTo(stream);
-            stream.Seek(0, SeekOrigin.Begin);
-
-            File.WriteAllBytes(
-                Path.Combine(DevShadersOutput, "csgo_simple_pc_50_features.vcs"),
-                stream.ToArray());
-
-            return;
+            Console.ReadKey();
         }
 
         using var package = new Package();
@@ -57,13 +37,22 @@ public class ShaderPatcher
         {
             package.ReadEntry(entry, out var data);
 
-            var filename = Path.GetFileName(entry.GetFullPath());
-            var vcsCollectionName = filename[..filename.LastIndexOf('_')]; // in the form water_dota_pcgl_40
-
-            var shaderFile = new ShaderFile();
+            using var shaderFile = new ShaderFile();
             shaderFile.Read(entry.GetFullPath(), new MemoryStream(data));
 
-            var newShaderFile = ShaderDowngrade_V67_To_V66(shaderFile);
+            using var patchedShader = ShaderFile_V67_To_V66(shaderFile);
+            var outPath = Path.Combine(Output, entry.GetFullPath());
+
+            Console.WriteLine($"Patched shader: {entry.GetFullPath()}");
+            ShaderFileSave(patchedShader, outPath);
+        }
+
+        foreach (var entry in package.Entries["ini"])
+        {
+            var outPath = Path.Combine(Output, entry.GetFullPath());
+            File.WriteAllText(outPath, string.Empty);
+
+            Console.WriteLine($"Shader {entry.GetFileName()} is ready!");
         }
 
         Console.WriteLine("Done generating shaders!");
@@ -71,7 +60,7 @@ public class ShaderPatcher
     }
 
 
-    public static ShaderFile ShaderDowngrade_V67_To_V66(ShaderFile shaderFile)
+    public static ShaderFile ShaderFile_V67_To_V66(ShaderFile shaderFile)
     {
         if (shaderFile.VcsVersion != 67)
         {
@@ -85,7 +74,7 @@ public class ShaderPatcher
         shaderFile.DataReader.BaseStream.Position = 0;
         shaderFile.DataReader.BaseStream.CopyTo(ms);
 
-        void PatchBytes(Stream stream, long blockOffset, int member, byte[] original, byte[] newValue)
+        static void PatchBytes(Stream stream, long blockOffset, int member, byte[] original, byte[] newValue)
         {
             if (original.Length != newValue.Length)
             {
@@ -101,30 +90,30 @@ public class ShaderPatcher
             foreach (var byteToCompare in original)
             {
                 var actual = stream.ReadByte();
-                if (actual == byteToCompare)
+                if (actual != byteToCompare)
                 {
-                    continue;
+                    throw new Exception($"Byte is different! {actual:X} != {byteToCompare:X}");
                 }
-
-                throw new Exception($"Byte is different! {actual:X} != {byteToCompare:X}");
             }
 
             stream.Seek(blockOffset + member, SeekOrigin.Begin);
             stream.Write(newValue, 0, newValue.Length);
         }
 
+        // Change the version number
         if (shaderFile.FeaturesHeader != null)
         {
             var blockOffset = (long)shaderDataBlockStart!.GetValue(shaderFile.FeaturesHeader)!;
-            PatchBytes(ms, blockOffset, 4, BitConverter.GetBytes(shaderFile.VcsVersion), BitConverter.GetBytes(66));
+            PatchBytes(ms, blockOffset, 4, BitConverter.GetBytes(67), BitConverter.GetBytes(66));
         }
 
         if (shaderFile.VspsHeader != null)
         {
             var blockOffset = (long)shaderDataBlockStart!.GetValue(shaderFile.VspsHeader)!;
-            PatchBytes(ms, blockOffset, 4, BitConverter.GetBytes(shaderFile.VcsVersion), BitConverter.GetBytes(66));
+            PatchBytes(ms, blockOffset, 4, BitConverter.GetBytes(67), BitConverter.GetBytes(66));
         }
 
+        // Change ChannelBlock.Channel value (only known difference in version 67)
         foreach (var channelBlock in shaderFile.ChannelBlocks)
         {
             var blockOffset = (long)shaderDataBlockStart!.GetValue(channelBlock)!;
@@ -150,5 +139,15 @@ public class ShaderPatcher
         result.Read(shaderFile.FilenamePath, ms);
 
         return result;
+    }
+
+    public static void ShaderFileSave(ShaderFile shaderFile, string filePath)
+    {
+        var stream = new MemoryStream();
+        shaderFile.DataReader.BaseStream.Position = 0;
+        shaderFile.DataReader.BaseStream.CopyTo(stream);
+        stream.Seek(0, SeekOrigin.Begin);
+
+        File.WriteAllBytes(filePath, stream.ToArray());
     }
 }
