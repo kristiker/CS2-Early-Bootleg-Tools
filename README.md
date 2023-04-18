@@ -28,4 +28,6 @@ ShaderFilePatcher makes all CS2 shaders load in Dota 2 Tools. It does so by chan
 ### Results
 ![image](https://user-images.githubusercontent.com/26466974/232033892-2cf16cb7-3000-47c7-ac7d-bf77b78b8c9c.png)
 ![image](https://user-images.githubusercontent.com/26466974/232033473-73c1422e-b51c-474d-9e17-77b91a23f11d.png)
+![image](https://user-images.githubusercontent.com/26466974/232823799-cabec839-f127-4d73-83d4-531b40f6db92.png)
+
 <a href="https://www.youtube.com/watch?v=Uf4zJCpWtI4">![image](https://user-images.githubusercontent.com/26466974/230385962-1596cfee-2c51-4fb7-84f6-1e14241f2284.png)</a>
