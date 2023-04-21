@@ -47,26 +47,12 @@ public class ShaderPatcher
 
             var patchedShader = shaderFile;
 
-            if (shaderFile.VcsVersion > 66)
-            {
-                patchedShader = ShaderFile_V67_To_V66(patchedShader);
-                Console.WriteLine($"Patched shader {shaderFile.VcsVersion}->{patchedShader.VcsVersion}: {entry.GetFullPath()}");
-
-                var outPath = Path.Combine(Output, "v66", entry.GetFullPath());
-                ShaderFileSave(patchedShader, outPath);
-            }
-
-            if (shaderFile == patchedShader)
-            {
-                Console.WriteLine($"Shader '{shaderFile.ShaderName}' is already version 66!");
-            }
-
-            if (shaderFile.VcsVersion == 66)
+            if (shaderFile.VcsVersion == 67)
             {
                 patchedShader = ShaderFile_BC7_To_DXT5(patchedShader, out var hasBC7);
                 if (!hasBC7)
                 {
-                    Console.WriteLine($"Shader '{shaderFile.ShaderName}' does not reference BC7!");
+                    Console.WriteLine($"Shader '{shaderFile.ShaderName}' does not reference BC7! Copying the file as is.");
                 }
                 else
                 {
