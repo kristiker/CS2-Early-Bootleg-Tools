@@ -59,7 +59,7 @@ public class ShaderPatcher
                     Console.WriteLine($"Patched shader (replaced BC7 refs with DXT5): {entry.GetFullPath()}");
                 }
 
-                var outPath = Path.Combine(Output, "v66_NoBC7", entry.GetFullPath());
+                var outPath = Path.Combine(Output, "NoBC7", entry.GetFullPath());
                 ShaderFileSave(patchedShader, outPath);
             }
 
